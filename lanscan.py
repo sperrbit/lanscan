@@ -18,8 +18,8 @@ def lookup(addr):
 # Pasring the Arguments
 parser = argparse.ArgumentParser(description='LAN-SCAN')
 parser.add_argument('-n','--network', help='e.g. 192.168.10.0/24', required=True)
-parser.add_argument('-d','--dns', help='Set DNS lookup True or False')
-parser.add_argument('-l','--log', help='Creates a comma-seperated-logfile')
+parser.add_argument('-d','--dns', help='FALSE sets DNS lookup active or inactive')
+parser.add_argument('-l','--log', help='TRUE creates a comma-seperated-logfile')
 
 args = vars(parser.parse_args())
 network = str(args['network'])
@@ -46,10 +46,10 @@ else:
     nslookup=True
 
 # Check-Loop
-print ("\nScanning "+network+" for hosts...\n")
+print ("\n** Scanning "+network+" for hosts **\n")
 
 print ("IP\t\tStatus\tName")
-print ("--\t\t------\t-----")
+print ("--\t\t------\t----")
 count = 0
 hostssalive =""
 ips = 0
@@ -58,8 +58,8 @@ ips = 0
 ts= str(datetime.date.today())
 
 if (logging==True):
-    fw = open('ipscan_'+ts+'.log','w')
-    fw.write("IP\t\tStatus\tName\n")
+    fw = open('ipscan_'+ts+'.csv','w')
+    fw.write("IP,Status,Name\n")
 
 for ip in IPSet([network]):
     try:
@@ -76,7 +76,7 @@ for ip in IPSet([network]):
             name = ""
         print (str(ip)+"\tALIVE\t"+name)
         if (logging==True):
-            fw.write(str(ip)+"\tALIVE\t"+name+"\n")
+            fw.write(str(ip)+",ALIVE,"+name+"\n")
 
         count += 1
         if (name != ""):
