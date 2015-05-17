@@ -39,6 +39,7 @@ print ("IP\t\tStatus\tName")
 print ("--\t\t------\t-----")
 count = 0
 hostssalive =""
+ips = 0
 for ip in IPSet([network]):
     try:
         response = subprocess.check_output(
@@ -56,7 +57,7 @@ for ip in IPSet([network]):
 
         count += 1
         if (name != ""):
-            hostssalive += str(ip)+" ("+name+")"+"\n"
+            hostssalive += str(ip)+"\t"+name+"\n"
         else:
             hostssalive += str(ip)+"\n"
 
@@ -64,12 +65,15 @@ for ip in IPSet([network]):
         response = None
 
         print (str(ip))
+    ips = ips +1
 
-# Summary 
+# Summary
+print ("\nSummary:\n--------\n"+str(ips)+" hosts scanned.")
+
 if (int(count) == 1):
-    print ("\nSummary\n--------\n"+str(count)+" host alive")
+    print (str(count)+" host alive")
 else:
-    print ("\nSummary:\n--------\n"+str(count)+" hosts alive")
+    print (str(count)+" hosts alive")
 
 if (hostssalive != ""):
     print ("\n"+hostssalive)
