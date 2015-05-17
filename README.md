@@ -22,7 +22,7 @@ This script scans the given network for hosts that responds to an ICMP echo.
 
 Scanning the network 10.20.0.0/30 for alive hosts:
 
-    ./lanscan.py -n 10.20.0.0/30
+    $ ./lanscan.py -n 10.20.0.0/30
 
 Example output:
 
