@@ -34,7 +34,9 @@ Example output:
 
     Summary:
     --------
+    4 hosts scanned
     2 hosts alive
+    
     10.20.0.1 (rtr001)
     10.20.0.2 (rtr002)
 

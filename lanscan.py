@@ -5,6 +5,8 @@ from netaddr import *
 import argparse
 import subprocess
 import socket
+from sys import argv
+import datetime
 
 # DNS Lookup
 def lookup(addr):
@@ -17,17 +19,28 @@ def lookup(addr):
 parser = argparse.ArgumentParser(description='LAN-SCAN')
 parser.add_argument('-n','--network', help='e.g. 192.168.10.0/24', required=True)
 parser.add_argument('-d','--dns', help='Set DNS lookup True or False')
+parser.add_argument('-l','--log', help='Creates a comma-seperated-logfile')
 
 args = vars(parser.parse_args())
 network = str(args['network'])
 dns = str(args['dns'])
 
+log = str(args['log'])
+if (log==None):
+    logging=False
+elif ((log=="True") or (log=="TRUE") or (log=="true")):
+    logging=True
+elif ((log=="False") or (log=="FALSE") or (log=="false")):
+    logging=False
+else:
+    logging=False
+
 # Check if DNS Lookup-Argument is set
 if(dns==None):
     nslookup=True
-elif(dns=="True"):
+elif((dns=="True") or (dns=="true") or (dns=="TRUE")):
     nslookup=True
-elif(dns=="False"):
+elif((dns=="False") or (dns=="FALSE") or (dns=="false")):
     nslookup=False
 else:
     nslookup=True
@@ -40,6 +53,14 @@ print ("--\t\t------\t-----")
 count = 0
 hostssalive =""
 ips = 0
+
+#logging
+ts= str(datetime.date.today())
+
+if (logging==True):
+    fw = open('ipscan_'+ts+'.log','w')
+    fw.write("IP\t\tStatus\tName\n")
+
 for ip in IPSet([network]):
     try:
         response = subprocess.check_output(
@@ -54,6 +75,8 @@ for ip in IPSet([network]):
         else:
             name = ""
         print (str(ip)+"\tALIVE\t"+name)
+        if (logging==True):
+            fw.write(str(ip)+"\tALIVE\t"+name+"\n")
 
         count += 1
         if (name != ""):
@@ -65,10 +88,12 @@ for ip in IPSet([network]):
         response = None
 
         print (str(ip))
+        if (logging==True):
+            fw.write((str(ip)+"\n"))
     ips = ips +1
 
 # Summary
-print ("\nSummary:\n--------\n"+str(ips)+" hosts scanned.")
+print ("\nSummary:\n--------\n"+str(ips)+" hosts scanned")
 
 if (int(count) == 1):
     print (str(count)+" host alive")
