@@ -15,33 +15,38 @@ This script scans the given network for hosts that responds to an ICMP echo.
     -l, --logging [TRUE or FALSE]
     Enables or disables logging. Default is False. Logging will create a CSV-File in the script dir.
 
+    -o, --online [TRUE or FALSE]
+    True shows only online hosts. Default is true
+
     -h, --help
     Shows a quick help-message
 
 ##Example
 
-Scanning the network 10.20.0.0/30 for alive hosts:
+Scanning the network 192.168.178.0/30 for alive hosts:
 
-    $ ./lanscan.py -n 10.20.0.0/30
+    $ ./lanscan.py -n 192.168.178.0/30
 
 Example output:
 
-    Scanning 10.20.0.0/30 for hosts...
+    ** Scanning 192.168.178.0/30 for hosts **
 
-    IP          Status  Name
-    --		    ------  ----
-    10.20.0.0
-    10.20.0.1   ALIVE   rtr001
-    10.20.0.2   ALIVE   rtr002
-    10.20.0.3
+    100%|#############################################|Time: 0:00:01
 
-    Summary:
-    --------
-    4 hosts scanned
-    2 hosts alive
 
-    10.20.0.1 (rtr001)
-    10.20.0.2 (rtr002)
+    +---------------+--------+-----------+
+    | IP Address    | Status | Name      |
+    +---------------+--------+-----------+
+    | 192.168.178.1 | ONLINE | rtr001    |
+    | 192.168.178.2 | ONLINE | rtr002    |
+    +---------------+--------+-----------+
+
+
+    +-------------+-----------+
+    | IPs scanned | IPs alive |
+    +-------------+-----------+
+    | 4           | 2         |
+    +-------------+-----------+
 
 ##Contact
 

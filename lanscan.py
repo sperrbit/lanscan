@@ -7,7 +7,9 @@ import subprocess
 import socket
 from sys import argv
 import datetime
-
+from prettytable import PrettyTable
+from progressbar import Bar, Percentage, ProgressBar, ETA, SimpleProgress
+import progressbar
 # DNS Lookup
 def lookup(addr):
     try:
@@ -20,10 +22,12 @@ parser = argparse.ArgumentParser(description='LAN-SCAN')
 parser.add_argument('-n','--network', help='e.g. 192.168.10.0/24', required=True)
 parser.add_argument('-d','--dns', help='FALSE sets DNS lookup active or inactive')
 parser.add_argument('-l','--log', help='TRUE creates a comma-seperated-logfile')
+parser.add_argument('-o','--online', default='True', help='show only online hosts')
 
 args = vars(parser.parse_args())
 network = str(args['network'])
 dns = str(args['dns'])
+online = str(args['online'])
 
 log = str(args['log'])
 if (log==None):
@@ -48,8 +52,12 @@ else:
 # Check-Loop
 print ("\n** Scanning "+network+" for hosts **\n")
 
-print ("IP\t\tStatus\tName")
-print ("--\t\t------\t----")
+#print ("IP\t\tStatus\tName")
+#print ("--\t\t--\t--")
+x = PrettyTable(["IP Address", "Status", "Name"])
+x.align["IP Address"] = "l" 
+x.align["Name"] ="l"
+x.padding_width = 1
 count = 0
 hostssalive =""
 ips = 0
@@ -61,7 +69,9 @@ if (logging==True):
     fw = open('ipscan_'+ts+'.csv','w')
     fw.write("IP,Status,Name\n")
 
-for ip in IPSet([network]):
+pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], maxval=len(IPSet([network]))).start()
+
+for ip in  IPSet([network]):
     try:
         response = subprocess.check_output(
         ["ping", "-c", "1", "-n", "-W", "1", "-i","0.1", str(ip)],
@@ -74,7 +84,8 @@ for ip in IPSet([network]):
                 name = ""
         else:
             name = ""
-        print (str(ip)+"\tALIVE\t"+name)
+        #print (str(ip)+"\tALIVE\t"+name)
+        x.add_row([str(ip),"ONLINE",name])
         if (logging==True):
             fw.write(str(ip)+",ALIVE,"+name+"\n")
 
@@ -86,21 +97,36 @@ for ip in IPSet([network]):
 
     except subprocess.CalledProcessError:
         response = None
+        if (online!="True"):
+           # print (str(ip))
+            x.add_row([str(ip),"OFFLINE",""])
+            if (logging==True):
+                fw.write((str(ip)+"\n"))
+   # r.update(ips)
+    pbar.update(ips)
+    ips=ips+1
+pbar.finish()
+print ("\n")
+print x
 
-        print (str(ip))
-        if (logging==True):
-            fw.write((str(ip)+"\n"))
-    ips = ips +1
 
-# Summary
-print ("\nSummary:\n--------\n"+str(ips)+" hosts scanned")
+print ("\n")# Summary
+#print ("\nSummary\n--\n"+str(ips)+" IP's scanned")
+y = PrettyTable(["IPs scanned", "IPs alive"])
+y.align["IPs scanned"] = "l" # Left align city names
+y.align["IPs alive"] = "l" # Left align city names
+y.padding_width = 1
 
-if (int(count) == 1):
-    print (str(count)+" host alive")
-else:
-    print (str(count)+" hosts alive")
-
-if (hostssalive != ""):
-    print ("\n"+hostssalive)
-else:
-    print ("")
+y.add_row([str(ips), str(count)])
+print y
+#
+#if (int(count) == 1):
+#    print (str(count)+" host alive")
+#else:
+#    print (str(count)+" hosts alive")
+#if (online!="True"):
+#    if (hostssalive != ""):
+#        print ("\n"+hostssalive)
+#    else:
+#        print ("")
+print ("\n")
