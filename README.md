@@ -1,10 +1,10 @@
-#LANSCAN
+# LANSCAN
 
-##Overview
+## Overview
 
 This script scans the given network for hosts that responds to an ICMP echo.
 
-##Usage
+## Usage
 
     -n, --network [NETWORK]
     Specifies the network network to be scanned. E.g. 192.168.10.0/24.
@@ -21,7 +21,7 @@ This script scans the given network for hosts that responds to an ICMP echo.
     -h, --help
     Shows a quick help-message
 
-##Example
+## Example
 
 Scanning the network 192.168.178.0/30 for alive hosts:
 
@@ -48,6 +48,6 @@ Example output:
     | 4           | 2         |
     +-------------+-----------+
 
-##Contact
+## Contact
 
 You can contact me via mail: [mail@sysadmin-log.de](mail@sysadmin-log.de).
