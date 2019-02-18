@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
-# Wolters Kluwer Deutschland
 # Christoph Franke
-# christoph.franke@wolterskluwer.com
+# mail@cfranke.org
 # 12.02.2019
 
 from netaddr import *
