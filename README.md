@@ -16,7 +16,7 @@ This script will scan a given network for hosts that respond to either an icmp e
 Use CTRL+C to stop the scan manualy. 
 
 ## Example
-	$./lanscan.py --network 192.168.178.0/24 -t 0.3
+	$./lanscan.py --network 192.168.178.0/24 --timeout 0.3
 Scans the network 192.168.178.0/24 for online hosts with a timeout of 0.3 seconds. 
 
 	IP, STATUS, HOSTNAME, ftp, ssh, http, https, smb, rdp
