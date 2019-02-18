@@ -1,53 +1,28 @@
-# LANSCAN
+# LanScan
 
 ## Overview
-
-This script scans the given network for hosts that responds to an ICMP echo.
+This script will scan a given network for hosts that respond to either an icmp echo or tcp/22, tcp/23, tcp/80, tcp/443, tcp/445 or tcp/3389. The output is a csv. 
 
 ## Usage
+	-h, --help
+	show this help message and exit
 
-    -n, --network [NETWORK]
-    Specifies the network network to be scanned. E.g. 192.168.10.0/24.
+	-n NETWORK, --network NETWORK
+	e.g. 192.168.10.0/24
 
-    -d, --dns [TRUE or FALSE]
-    Enables oder disables the name-server-lookup. The default-value is True.
-
-    -l, --logging [TRUE or FALSE]
-    Enables or disables logging. Default is False. Logging will create a CSV-File in the script dir.
-
-    -o, --online [TRUE or FALSE]
-    True shows only online hosts. Default is true
-
-    -h, --help
-    Shows a quick help-message
+	-t TIMEOUT, --timeout TIMEOUT
+	timeout in seconds e.g. 0.5
+	
+Use CTRL+C to stop the scan manualy. 
 
 ## Example
+	$./lanscan.py --network 192.168.178.0/24 -t 0.3
+Scans the network 192.168.178.0/24 for online hosts with a timeout of 0.3 seconds. 
 
-Scanning the network 192.168.178.0/30 for alive hosts:
+	IP, STATUS, HOSTNAME, ftp, ssh, http, https, smb, rdp
+	192.168.178.0, OFFLINE, NA
+	192.168.178.1, ONLINE, 0,1,1,1,0,0
+	192.168.178.2, ONLINE, 0,1,0,0,0,0
+	192.168.178.3, OFFLINE, NA
+	...
 
-    $ ./lanscan.py -n 192.168.178.0/30
-
-Example output:
-
-    ** Scanning 192.168.178.0/30 for hosts **
-
-    100%|#############################################|Time: 0:00:01
-
-
-    +---------------+--------+-----------+
-    | IP Address    | Status | Name      |
-    +---------------+--------+-----------+
-    | 192.168.178.1 | ONLINE | rtr001    |
-    | 192.168.178.2 | ONLINE | rtr002    |
-    +---------------+--------+-----------+
-
-
-    +-------------+-----------+
-    | IPs scanned | IPs alive |
-    +-------------+-----------+
-    | 4           | 2         |
-    +-------------+-----------+
-
-## Contact
-
-You can contact me via mail: [mail@sysadmin-log.de](mail@sysadmin-log.de).
